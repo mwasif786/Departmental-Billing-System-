@@ -46,7 +46,7 @@ public class DepartmentalStore {
             String choice = sc.nextLine();
 
             if (choice.equals("1")) {
-                if (login("admin", "admin123")) runMenu(true);
+                if (login("admin", "wasif123")) runMenu(true);
             } else if (choice.equals("2")) {
                 if (login("cashier", "cashier123")) runMenu(false);
             } else if (choice.equals("3")) {
@@ -128,6 +128,12 @@ public class DepartmentalStore {
         int qty = Integer.parseInt(sc.nextLine());
 
         cart.add(new Item(name, price, qty));
+        ItemDAO.addItem(
+                name,
+                price,
+                qty,
+                price * qty
+        );
         System.out.println("Item added to cart.");
     }
 
@@ -211,6 +217,25 @@ public class DepartmentalStore {
         System.out.println("Payment:   " + paymentMethod);
         System.out.println("Time:      " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")));
         System.out.println("=".repeat(40));
+
+        boolean saved = BillDAO.addBill(
+                customerName,
+                customerPhone,
+                grandTotal
+        );
+
+        if(saved)
+        {
+            System.out.println("Bill Saved Successfully!");
+        }
+        else
+        {
+            System.out.println("Bill Save Failed!");
+        }
+
+        cart.clear();
+        discountPercent = 0;
+        taxRate = 0;
 
         cart.clear();
         discountPercent = 0;
